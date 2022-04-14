@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/loginbg"
+    >
+    <!--로그인-->
+    <TextView
+        android:id="@+id/view1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="40sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\n임시 로그인  "
+        android:textColor="@color/white"
+        android:textSize="45dp"
+        android:textStyle="bold"
+        >
+    </TextView>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="100sp"
+        app:layout_constraintEnd_toEndOf="@+id/view1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/view1"
+        app:layout_constraintTop_toBottomOf="@id/view1"></View>
+
+    <EditText
+        android:id="@+id/et_TempId"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10sp"
+        android:background="@drawable/rounded_corner2"
+        android:hint="ID"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:layout_constraintWidth_percent="0.8"
+        android:inputType="text"
+        />
+
+
+    <EditText
+        android:id="@+id/et_TempPass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10sp"
+        android:background="@drawable/rounded_corner2"
+        android:hint="PASSWORD"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_TempId"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="@+id/et_TempId"
+        app:layout_constraintTop_toBottomOf="@+id/et_TempId"
+        app:layout_constraintWidth_percent="0.8"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/et_TempName"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10sp"
+        android:background="@drawable/rounded_corner2"
+        android:hint="이름"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_TempPass"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="@+id/et_TempPass"
+        app:layout_constraintTop_toBottomOf="@+id/et_TempPass"
+        app:layout_constraintWidth_percent="0.8"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/et_TempAge"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10sp"
+        android:background="@drawable/rounded_corner2"
+        android:hint="나이"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_TempName"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="@+id/et_TempName"
+        app:layout_constraintTop_toBottomOf="@+id/et_TempName"
+        app:layout_constraintWidth_percent="0.8"
+        android:inputType="number"
+        android:maxLength="2"/>
+
+
+
+
+    <android.widget.Button
+        android:layout_marginTop="10sp"
+        android:id="@+id/btn_TempLogin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.06"
+        android:background="@color/choose"
+        android:text="임시로그인"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_TempAge"
+        app:layout_constraintStart_toStartOf="@+id/et_TempAge"
+        app:layout_constraintTop_toBottomOf="@+id/et_TempAge"></android.widget.Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+

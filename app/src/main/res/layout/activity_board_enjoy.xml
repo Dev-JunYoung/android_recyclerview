@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="30sp"
+    >
+
+    <android.widget.Button
+        android:background="@drawable/btn_white"
+        android:id="@+id/btn_board_all"
+        app:layout_constraintWidth_percent="0.4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:text="전체  게시물"
+        app:layout_constraintRight_toLeftOf="@id/btn_board_enjoy"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="0dp"
+        app:layout_constraintHorizontal_chainStyle="packed" />
+
+
+    <android.widget.Button
+        android:textColor="@color/white"
+        android:id="@+id/btn_board_enjoy"
+        app:layout_constraintWidth_percent="0.4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/btn_choose"
+        android:text="즐겨찾는 게시물"
+        app:layout_constraintBottom_toBottomOf="@id/btn_board_all"
+        app:layout_constraintLeft_toRightOf="@id/btn_board_all"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_board_all"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        ></android.widget.Button>
+
+    <ImageButton
+        android:id="@+id/btn_AddBoard"
+        app:layout_constraintWidth_percent="0.05"
+        app:layout_constraintHeight_percent="0.05"
+        android:layout_width="0dp"
+        android:layout_height="50sp"
+        android:layout_alignParentRight="true"
+        android:background="#ffffff"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_plus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        ></ImageButton>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_margin="20sp"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.324"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_board_all">
+    </View>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70sp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <android.widget.Button
+            android:id="@+id/btn_display_start"
+            android:textColor="@color/white"
+            android:background="@color/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/start_Tap"
+            android:textSize="20sp"
+            android:layout_weight="1">
+        </android.widget.Button>
+        <android.widget.Button
+            android:id="@+id/btn_record"
+            android:textColor="@color/white"
+            android:background="@color/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/record_Tap"
+            android:textSize="20sp"
+            android:layout_weight="1">
+        </android.widget.Button>
+        <android.widget.Button
+            android:id="@+id/btn_board"
+            android:textColor="@color/white"
+            android:background="@color/choose"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/board_Tap"
+            android:textSize="20sp"
+            android:layout_weight="1">
+        </android.widget.Button>
+        <android.widget.Button
+            android:id="@+id/btn_profile"
+            android:textColor="@color/white"
+            android:background="@color/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/profile_Tap"
+            android:textSize="20sp"
+            android:layout_weight="1">
+        </android.widget.Button>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

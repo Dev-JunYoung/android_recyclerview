@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/Theme.AppCompat.NoActionBar"
+    android:background="@color/white"
+    >
+
+    <include
+        layout="@layout/toolbar"/>
+    <TextView
+        android:textColor="#716B6B"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:textAlignment="center"
+        android:text="0:00"
+        android:textSize="70sp"
+        android:layout_marginTop="50sp">
+    </TextView>
+    <TextView
+        android:textColor="#716B6B"
+        android:id="@+id/km_view"
+        app:layout_constraintTop_toBottomOf="@id/distance"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="킬로미터"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:paddingBottom="30sp">
+    </TextView>
+    <LinearLayout
+        android:id="@+id/record_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:weightSum="6"
+        app:layout_constraintTop_toBottomOf="@id/km_view"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2">
+            <TextView
+                android:textColor="#716B6B"
+                android:id="@+id/tv_totalCnt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textSize="30sp"
+                android:textAlignment="center">
+            </TextView>
+            <TextView
+                android:textColor="#716B6B"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="횟수"
+                android:textSize="30sp"
+                android:textAlignment="center">
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:textColor="#716B6B"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2">
+            <TextView
+                android:textColor="#716B6B"
+                android:id="@+id/tv_totalTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textSize="30sp"
+                android:textAlignment="center">
+            </TextView>
+            <TextView
+                android:textColor="#716B6B"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="시간"
+                android:textSize="30sp"
+                android:textAlignment="center">
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:textAlignment="center">
+            <TextView
+                android:textColor="#716B6B"
+                android:id="@+id/tv_totalStep"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textSize="30sp"
+                android:textAlignment="center">
+            </TextView>
+            <TextView
+
+                android:textColor="#716B6B"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="걸음"
+                android:textSize="30sp"
+                android:textAlignment="center">
+            </TextView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/line"
+        app:layout_constraintTop_toBottomOf="@id/record_view"
+        android:background="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="5sp"
+        android:layout_margin="20sp">
+
+    </View>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_record_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/line"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/item_record" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="70sp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.widget.Button
+            android:id="@+id/btn_display_start"
+            android:textColor="@color/white"
+            android:background="@color/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/start_Tap"
+            android:textSize="20sp"></android.widget.Button>
+
+        <android.widget.Button
+            android:id="@+id/btn_record"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/choose"
+            android:text="@string/record_Tap"
+            android:textSize="20sp"></android.widget.Button>
+
+        <android.widget.Button
+            android:id="@+id/btn_board"
+            android:textColor="@color/white"
+            android:background="@color/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/board_Tap"
+            android:textSize="20sp"></android.widget.Button>
+
+        <android.widget.Button
+            android:id="@+id/btn_profile"
+            android:textColor="@color/white"
+            android:background="@color/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/profile_Tap"
+            android:textSize="20sp"></android.widget.Button>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
