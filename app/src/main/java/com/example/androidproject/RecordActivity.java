@@ -311,7 +311,7 @@ Menu menu2;
                         profile_time=totalTime;
                         profile_step=totalStep;
                         profile_cnt=totalCnt;
-                        //여기
+
                         mArrayList.remove(pos);
 
                         String cnt= String.valueOf(totalCnt);

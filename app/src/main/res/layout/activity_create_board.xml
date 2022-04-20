@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="제목"/>
+            android:text="어디서"/>
 
         <EditText
             android:id="@+id/et_title"
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="제목을 입력하세요."
+            android:hint="어떤 산을 가셨나요?"
             />
     </LinearLayout>
     <LinearLayout
@@ -60,6 +60,7 @@
                 android:layout_width="106sp"
                 android:layout_height="106sp"
                 android:layout_weight="1"
+
                 />
             <ImageView
                 android:id="@+id/iv_board2_img"
@@ -80,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="내용"/>
+        android:text="무엇을"/>
     <EditText
         android:id="@+id/et_content"
         android:padding="16dp"
@@ -88,7 +89,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="#eeeeee"
-        android:hint="내용을 입력하세요."
+        android:hint="무엇을 하셨나요?"
         />
 
     <android.widget.Button

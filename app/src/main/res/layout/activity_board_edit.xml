@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="제목"/>
+            android:text="어디서"/>
 
         <EditText
             android:id="@+id/edit_et_title"
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="제목을 입력하세요."
+            android:hint="어떤 산을 가셨나요?"
             />
     </LinearLayout>
     <LinearLayout
@@ -37,11 +37,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:textAlignment="center"
+                android:gravity="top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이미지"
-                android:padding="16dp"/>
+                android:padding="16dp"
+                />
             <android.widget.Button
                 android:id="@+id/edit_btn_image"
                 android:layout_width="wrap_content"
@@ -53,24 +54,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="3">
             <ImageView
                 android:id="@+id/edit_iv_board_img"
                 android:layout_width="90sp"
                 android:layout_height="90sp"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 />
             <ImageView
                 android:id="@+id/edit_iv_board_img2"
                 android:layout_width="90sp"
                 android:layout_height="90sp"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 />
             <ImageView
                 android:id="@+id/edit_iv_board_img3"
                 android:layout_width="90sp"
                 android:layout_height="90sp"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 />
         </LinearLayout>
 
@@ -79,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="내용"/>
+        android:text="무엇을"/>
     <EditText
         android:id="@+id/edit_et_content"
         android:padding="16dp"
@@ -87,7 +92,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="#eeeeee"
-        android:hint="내용을 입력하세요."
+        android:hint="무엇을 하셨나요?"
         />
     <LinearLayout
         android:layout_width="match_parent"

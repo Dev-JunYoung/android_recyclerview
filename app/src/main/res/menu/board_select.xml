@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/read"
-        android:title="세부내용"
+        android:title="세부무엇을"
         app:showAsAction="never">
     </item>
     <item

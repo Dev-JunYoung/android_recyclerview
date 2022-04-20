@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="제목(산 이름)"/>
+            android:text="어디서"/>
 
         <TextView
             android:id="@+id/tv_board_title"
@@ -37,7 +37,7 @@
                 android:textAlignment="center"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="내용"
+                android:text="무엇을"
                 android:padding="16dp"/>
             <TextView
                 android:id="@+id/tv_board_content"
@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:hint="내용을 입력하세요."
+        android:hint="무엇을 하셨나요?"
         />-->
 
     <android.widget.Button

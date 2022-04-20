@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHolder> {
+public class BoardEnjoyAdapter extends RecyclerView.Adapter<BoardEnjoyAdapter.BoardViewHolder> {
 
     private ArrayList<BoardItemData> mList;
     private Context context;
@@ -48,7 +48,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
         }
     }
 
-    public BoardAdapter(ArrayList<BoardItemData> mList, Context context) {
+    public BoardEnjoyAdapter(ArrayList<BoardItemData> mList, Context context) {
         this.mList = mList;
         this.context = context;
     }

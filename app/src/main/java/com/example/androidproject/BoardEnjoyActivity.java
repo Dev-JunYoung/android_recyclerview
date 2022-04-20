@@ -1,17 +1,39 @@
 package com.example.androidproject;
 
+import static com.example.androidproject.BoardActivity.REQUEST_READ_CODE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_display_start,btn_record,btn_board,btn_profile,btn_board_all,btn_board_enjoy;
     private ImageButton btn_AddBoard;
+
+    private ArrayList<BoardItemData> mArrayList;
+    private BoardAdapter mAdapter;
+    String photo;
+    static int i=0;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    ArrayList boardAll=new ArrayList();
 
     private long backpressedTime = 0;
     public void onBackPressed() {
@@ -47,6 +69,54 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
         btn_AddBoard.setOnClickListener(this);
         btn_board_all.setOnClickListener(this);
         btn_board_enjoy.setOnClickListener(this);
+
+        RecyclerView mRecyclerView=(RecyclerView)findViewById(R.id.recyclerview_board_list);
+        LinearLayoutManager mLinearLayoutManager=new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        mArrayList=new ArrayList<BoardItemData>();
+        mAdapter=new BoardAdapter(mArrayList,this.getApplicationContext());
+        mRecyclerView.setAdapter(mAdapter);
+        loadData();
+
+        sharedPreferences = getSharedPreferences("board",MODE_PRIVATE);
+        editor=sharedPreferences.edit();
+        //READ BOARD
+        mAdapter.setOnItemClickListener(new RecordAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(View v, int pos) {
+                Intent intent=new Intent(BoardEnjoyActivity.this,BoardReadActivity.class);
+                intent.putExtra("title",mArrayList.get(pos).getTitle());
+                intent.putExtra("content",mArrayList.get(pos).getContent());
+
+                //수정
+                intent.putExtra("photo",mArrayList.get(pos).getImgList().toString());
+                /*intent.putExtra("img2",mArrayList.get(pos).getImgList().get(1));
+                intent.putExtra("img3",mArrayList.get(pos).getImgList().get(2));*/
+                System.out.println("Board photo"+mArrayList.get(pos).getImgList().toString());
+                /*intent.putExtra("img3",mArrayList.get(pos).getImgList().get(2).toString());*/
+
+
+                i=pos;
+                startActivityForResult(intent,REQUEST_READ_CODE);
+
+
+            }
+
+            @Override
+            public void OnDeleteClick(View v, int pos) {
+
+            }
+        });
+
+
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -89,5 +159,26 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
                 startActivity(intent7);
                 break;
         }
+    }
+
+    private void loadData() {
+        if (mArrayList == null) {
+            mArrayList = new ArrayList<>();
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences("board", MODE_PRIVATE);
+        Type type=new TypeToken<ArrayList<BoardItemData>>(){}.getType();
+        Map<String,?> keys = sharedPreferences.getAll();
+        Gson gson=new Gson();
+        //board 테이블의 전체값을 불러온다.
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            String json=entry.getValue().toString();
+            ArrayList<BoardItemData> data=gson.fromJson(json,type);
+            boardAll.add(data);
+            for(int i=0;i<data.size();i++){
+                mArrayList.add(data.get(i));
+            }
+
+        }
+        /*System.out.println(mArrayList.get(0).getName());*/
     }
 }

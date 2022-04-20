@@ -1,28 +1,31 @@
 package com.example.androidproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private EditText et_id,et_pass;
     private Button btn_login,btn_signup,btn_temporary;
+
+    SharedPreferences sharedPreferences;
+
+
+    public static User user;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         btn_login=findViewById(R.id.btn_login);
         btn_signup=findViewById(R.id.btn_signup);
         btn_temporary=findViewById(R.id.btn_temporary);
+
 
         //임시로그인
         btn_temporary.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +68,50 @@ public class MainActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userID=et_id.getText().toString();
+                SharedPreferences sharedPreferences = getSharedPreferences("userList",MODE_PRIVATE);
+                Gson gson = new Gson();
+                String json = sharedPreferences.getString("userList", null);
+                Type type = new TypeToken<ArrayList<User>>() {}.getType();
+                ArrayList<User> data= gson.fromJson(json, type);
+
+                for (int i=0;i<data.size();i++){
+                    //아이디 비밀번호확인.
+                    System.out.println("아이디 비밀번호확인.");
+                    if(data.get(i).getId().equals(et_id.getText().toString())){
+                        System.out.println("아이디 일치");
+                        if(data.get(i).getPass().equals(et_pass.getText().toString())){
+                            System.out.println("비밀번호 일치");
+                            Intent intent=new Intent(MainActivity.this,DisplayStartActivity.class);
+                            et_id.setText("");
+                            et_pass.setText("");
+                            user=new User(data.get(i).getId(),data.get(i).getPass(),data.get(i).getName(),data.get(i).getAge());
+
+
+                            Toast.makeText(MainActivity.this, data.get(i).getName()+"님이 로그인 하셨습니다. ", Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+
+
+                        }else {
+
+                        }
+                    }else {
+
+                    }
+
+                }
+                Toast.makeText(MainActivity.this, "아이디, 비밀번호를 확인 하세요. ", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+
+
+
+
+    }
+
+
+       /*         String userID=et_id.getText().toString();
                 String userPass=et_pass.getText().toString();
 
                 Response.Listener<String> responseListener=new Response.Listener<String>() {
@@ -93,14 +140,11 @@ public class MainActivity extends AppCompatActivity {
                 };
                 LoginRequest loginRequest=new LoginRequest(userID,userPass,responseListener);
                 RequestQueue queue= Volley.newRequestQueue(MainActivity.this);
-                queue.add(loginRequest);
-            }
-        });
+                queue.add(loginRequest);*/
 
-
-
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //user
     }
-
-
 }

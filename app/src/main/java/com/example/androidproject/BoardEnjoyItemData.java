@@ -2,14 +2,14 @@ package com.example.androidproject;
 
 import java.util.ArrayList;
 
-public class BoardItemData {
+public class BoardEnjoyItemData {
     private String title;
     private String content;
     private ArrayList<String> imgList;
     private String name;
     private String time;
 
-    public BoardItemData(String title, String content, ArrayList<String> imgList, String name, String time) {
+    public BoardEnjoyItemData(String title, String content, ArrayList<String> imgList, String name, String time) {
         this.title = title;
         this.content = content;
         this.imgList = imgList;

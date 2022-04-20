@@ -30,15 +30,17 @@ public class BoardReadAdapter extends RecyclerView.Adapter<BoardReadAdapter.Boar
 
     @Override
     public void onBindViewHolder(@NonNull BoardReadAdapter.BoardReadViewHolder holder, int position) {
+        for(int i=0;i<mList.size();i++){
         try {
-            for(int i=0;i<mList.size();i++){
-                holder.img.setImageURI(Uri.parse(mList.get(position).img));
-            }
 
-        }catch (NullPointerException e){
+                holder.img.setImageURI(Uri.parse(mList.get(position).img));
+
+            }catch (NullPointerException e){
             System.out.println("In BoardReadAdapter.onBindViewHolder");
         }
 
+
+        }
 
     }
     @Override

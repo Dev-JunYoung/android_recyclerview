@@ -1,8 +1,9 @@
 package com.example.androidproject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,17 +11,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class SignupActivity extends AppCompatActivity {
 
     private EditText et_id,et_pass,et_name,et_age;
     private Button btn_signup;
+
+    String id,pass,name,age;
+
+    SharedPreferences sharedPreferences;
+    Gson gson;
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,44 +37,95 @@ public class SignupActivity extends AppCompatActivity {
         et_name=findViewById(R.id.et_name);
         et_age=findViewById(R.id.et_age);
 
+
+
         btn_signup=findViewById(R.id.btn_signup);
+
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //EditText에 현재 입력되어있는 값을 get해온다.
-                String userID=et_id.getText().toString();
-                String userPass=et_pass.getText().toString();
-                String userName=et_name.getText().toString();
-                int userAge=Integer.parseInt(et_age.getText().toString());
 
-                Response.Listener<String> responseListener=new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println(response+"respon");
-                        try {
-                            JSONObject jsonObject=new JSONObject(response);
-                            boolean success=jsonObject.getBoolean("success");
-                            //회원가입 성공
-                            if(success){
-                                Toast.makeText(getApplicationContext(),"회원등록에 성공하였습니다.",Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(SignupActivity.this, com.example.androidproject.LoginActivity.class);
-                                startActivity(intent);
-                            }else {
-                                Toast.makeText(getApplicationContext(),"회원등록에 실패하였습니다.",Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                id=et_id.getText().toString();
+                pass=et_pass.getText().toString();
+                name=et_name.getText().toString();
+                age=et_age.getText().toString();
 
+                context=getApplicationContext();
+
+                // 1. 입력 받은 값으로 유저 객체 생성
+                //
+                        // 회원 중복 확인
+                        // 1. 리스트불러와서 for 문으로 id값 일치하는지 확인.
+                        // 2. 없으면 회원가입, 있으면 다시 값 입력.
+
+                // 2. 셰어드의 id를 키값으로 저장
+                // 3. 회원 리스트에 추가.
+                // 4. 회원 리스트 저장소 1개, id를 키값으로 회원 정보를 저장 하는 저장소 1개. ( 회원 정보안에는 회원 정보와 회원이 작성한 게시글이 있다.)
+
+                //1
+                //1
+                User user=new User(id,pass,name,age);
+                Intent intent=new Intent(SignupActivity.this,MainActivity.class);
+                //회원 정보 가져오기.
+                //저장소 불러오기
+                SharedPreferences userListSharedPreferences = getSharedPreferences("userList",MODE_PRIVATE);
+                SharedPreferences.Editor editor=userListSharedPreferences.edit();
+                Gson gson=new Gson();
+                //"키값" get 데이터 -> 모든 키 값 가져오기.
+
+                // 기존
+                String json=userListSharedPreferences.getString("userList",null);
+
+                Type type=new TypeToken<ArrayList<User>>(){}.getType();
+                // userArrayList == 저장소에 있던 userList 가져온 것.
+
+
+                ArrayList<User> userArrayList=gson.fromJson(json,type);
+                System.out.println("회원 가입 전 : "+userArrayList);
+                boolean check=true;
+                if (userArrayList == null) {
+                    //최초 실행
+                    userArrayList = new ArrayList<>();
+                    //바로 add
+                    userArrayList.add(user);
+                    //userArrayList JSON 으로 변환
+                    String jsonUserList=gson.toJson(userArrayList);
+                    // 키값 : userList 으로 저장
+                    editor.putString("userList",jsonUserList);
+                    // 커밋
+                    editor.commit();
+                    Toast.makeText(SignupActivity.this, "회원 가입에 성공 하셨습니다.", Toast.LENGTH_SHORT).show();
+                    //스타트
+                    startActivity(intent);
+                }else {
+                    if(check){ //중복체크확인
+                        userArrayList.add(user);
+                        Toast.makeText(SignupActivity.this, "회원 가입에 성공 하셨습니다.", Toast.LENGTH_SHORT).show();
+                        //값 생성
+                        //리스트에 추가
+                        userArrayList.add(user);
+                        //JSON 변환
+                        String jsonUserList=gson.toJson(userArrayList);
+                        //변환된 데이터 키값 "userList" 에 넣기.
+                        editor.putString("userList",jsonUserList);
+                        editor.commit();
+                        startActivity(intent);
+                    }else {
                     }
-                };
-                //서버로 Volley를 이용해서 요청을 함
-                //com.example.androidproject.SignupRequest signupRequest=new com.example.androidproject.SignupRequest(userID,userPass,userName,userAge,responseListener);
-                SignupRequest signupRequest=new SignupRequest(userID,userPass,userName,userAge,responseListener);
-                RequestQueue queue= Volley.newRequestQueue(SignupActivity.this);
-                queue.add(signupRequest);
+                    System.out.println("회원 가입 후 : "+userArrayList);
+
+
+
+
+                }//else
+
+
             }
         });
     }
+
+    // 중복확인
+    // 셰어드저장
+    // 유저리스트 저장.
+    
 }

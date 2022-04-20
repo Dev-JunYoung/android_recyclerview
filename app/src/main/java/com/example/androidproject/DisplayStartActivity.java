@@ -75,6 +75,9 @@ public class DisplayStartActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        //System.out.println(User.getInstance().getId());
         //위치 업데이트 콜백 정의
         //콜백 객체 생성
         /*locationCallback = new LocationCallback() {

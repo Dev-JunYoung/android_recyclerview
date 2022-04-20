@@ -1,8 +1,15 @@
 package com.example.androidproject;
+
+import static com.example.androidproject.MainActivity.user;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
@@ -26,12 +33,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.gson.Gson;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_display_start, btn_record, btn_board, btn_profile, btn_update;
     String tempId, tempPass;
     public static String tempName;
     String tempAge;
 
+    Context context;
     String distance, time, step, cnt;
 
     TextView tv_id, tv_pass, tv_name, tv_age, tv_distance, tv_time, tv_step, tv_cnt;
@@ -46,12 +59,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public static int profile_step=0;
     public static int profile_cnt=0;
 
+    SharedPreferences sharedPreferences;
+    Gson gson;
+
 
 
 
     ImageView iv_profile;
 
     private long backpressedTime = 0;
+    String imgStr;
 
     @Override
     public void onBackPressed() {
@@ -135,21 +152,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         Intent intent = getIntent();
 
-        tempId = intent.getStringExtra("tempId");
-        tempPass = intent.getStringExtra("tempPass");
-        tempName = intent.getStringExtra("tempName");
-        tempAge = intent.getStringExtra("tempAge");
-
-        //String str= String.valueOf(profile_distance);
-
-
-
-
-        //tv_id.setText(tempId);
-        //tv_pass.setText("이름,나이");
-        tv_name.setText("이름 : " + tempName);
-        tv_age.setText("나이 : " + tempAge);
-        //Log.e("get", String.valueOf(tv_id.getText()));
+        tv_name.setText("이름 : " + user.getName());
+        tv_age.setText("나이 : " + user.getAge());
 
         btn_display_start = findViewById(R.id.btn_display_start);
         btn_record = findViewById(R.id.btn_record);
@@ -164,6 +168,25 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         btn_record.setOnClickListener(this);
         btn_board.setOnClickListener(this);
         btn_profile.setOnClickListener(this);
+
+        File file=new File(
+                "/data/data/com.example.androidproject/shared_prefs/userProfile.xml"
+        );
+        SharedPreferences preferences=getSharedPreferences("userProfile",0);
+        String path=preferences.getString(user.getId(),"");
+        System.out.println(path);
+        System.out.println("저장된 패스"+preferences.getString(user.getId(),""));
+
+
+        iv_profile.setImageURI(Uri.parse(path));
+        if(file.exists()){
+            SharedPreferences profile=getSharedPreferences("userProfile",0);
+            System.out.println(profile.getString(user.getId(),""));
+            System.out.println(profile.getString(user.getId(),"")!=null);
+            if(profile.getString(user.getId(),"")!=null){
+                iv_profile.setImageURI(Uri.parse(profile.getString(user.getId(),"")));
+            }
+        }
     } //onCreate
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -286,17 +309,30 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             iv_profile.setImageBitmap(imageBitmap);
+            //여기
+            imgStr=getImageUri(this.getApplicationContext(),imageBitmap).toString();
         }
         if (requestCode == GALLERY && resultCode == RESULT_OK) {
-          /*  Bundle extras = data.getExtras();
+          /*  Bundle extras = data.getEx Bitmap imageBitmaptras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             iv_profile.setImageBitmap(imageBitmap);*/
 
             Uri selectedImageUri = data.getData();
             iv_profile.setImageURI(selectedImageUri);
-
+            imgStr= String.valueOf(selectedImageUri);
         }
+        //유저 프로필 저장.
+        SharedPreferences userProfileSharedPreferences =
+                getSharedPreferences("userProfile",MODE_PRIVATE);
+        SharedPreferences.Editor editor=userProfileSharedPreferences.edit();
 
+        Cursor c=getContentResolver().query(Uri.parse("content://media/external/images/media/64"),null,null
+                ,null,null);
+        c.moveToNext();
+        @SuppressLint("Range") String path=c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+        editor.putString(user.getId(),path);
+        System.out.println("path : "+path);
+        editor.commit();
     }
 
     public static Bitmap rotateImage(Bitmap source, float angle) {
@@ -305,4 +341,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
                 matrix, true);
     }
+    private Uri getImageUri(Context context, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+
 }
