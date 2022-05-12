@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:weightSum="8"
-    android:layout_margin="15dp"
+    android:layout_margin="10dp"
     android:orientation="vertical"
     android:clickable="true"
     >
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:text="시간"
             android:textColor="@color/main"
-            android:textSize="15sp"
+            android:textSize="10sp"
             android:layout_weight="5"
             />
 
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:shadowColor="@color/black"
             android:outlineSpotShadowColor="@color/black"
             app:useMaterialThemeColors="true"
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="0.00"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textAlignment="center">
             </TextView>
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="거리"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textAlignment="center">
             </TextView>
         </LinearLayout>
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="00:00"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textAlignment="center">
             </TextView>
             <TextView
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="시간"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textAlignment="center">
             </TextView>
         </LinearLayout>
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="-"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textAlignment="center">
             </TextView>
             <TextView
@@ -110,7 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="고도차"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textAlignment="center">
             </TextView>
         </LinearLayout>
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="0"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textAlignment="center">
             </TextView>
             <TextView
@@ -134,11 +134,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="걸음"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textAlignment="center">
             </TextView>
-        </LinearLayout>
-    </LinearLayout>
 
+
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_marginTop="5dp"
+        android:id="@+id/line"
+        app:layout_constraintTop_toBottomOf="@id/record_view"
+        android:background="#787575"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        />
 
 </LinearLayout>

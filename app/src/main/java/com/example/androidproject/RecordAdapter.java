@@ -46,8 +46,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     }
 
     public void RemoveItem(ArrayList<RecordItemData> selectionList) {
-       
-        
         for(int i=0;i<selectionList.size();i++){
             // Remove 선택된 인덱스값
             mList.remove(selectionList.get(i));

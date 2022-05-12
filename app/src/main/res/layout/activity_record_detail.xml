@@ -5,132 +5,157 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <TextView
-        android:id="@+id/tv_title"
-        app:layout_constraintTop_toTopOf="parent"
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/lay"
+        app:layout_constraintHeight_percent="0.66"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="40sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/lay"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="\nDetail  "
-        android:textColor="@color/black"
-        android:textSize="45dp"
-        android:textStyle="bold"
-        >
-    </TextView>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_back"
+        android:orientation="vertical"
+       >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:weightSum="3"
+          >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0.000"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="킬로미터"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/tv_MaxHeight"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="최고고도"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1" >
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0.000"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="시간"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/tv_MinHeight"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="최저고도"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_distance"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40sp"
-        android:background="@drawable/btn_white"
-        android:hint="킬로미터"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintLeft_toLeftOf="@id/tv_title"
-        app:layout_constraintRight_toRightOf="@id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintHeight_percent="0.07"></TextView>
-
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10sp"
-        android:background="@drawable/btn_white"
-        android:hint="시간"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_distance"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_distance"
-        app:layout_constraintTop_toBottomOf="@id/tv_distance"
-        android:inputType="number"
-        app:layout_constraintHeight_percent="0.07"
-        ></TextView>
-
-    <TextView
-        android:id="@+id/tv_step"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10sp"
-        android:background="@drawable/btn_white"
-        android:hint="걸음"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_time"
-        app:layout_constraintHeight_percent="0.07"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintStart_toStartOf="@+id/tv_time"
-        app:layout_constraintTop_toBottomOf="@+id/tv_time"
-
-        android:inputType="number"
-        />
-
-
-    <TextView
-        android:id="@+id/tv_MaxHeight"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10sp"
-        android:background="@drawable/btn_white"
-        android:hint="최고고도"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_step"
-        app:layout_constraintHeight_percent="0.07"
-        app:layout_constraintStart_toStartOf="@+id/tv_step"
-        app:layout_constraintTop_toBottomOf="@+id/tv_step"
-        app:layout_constraintWidth_percent="0.8"
-        android:inputType="number"/>
-
-
-    <TextView
-        android:id="@+id/tv_MinHeight"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/btn_white"
-        android:hint="최저고도"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_MaxHeight"
-        app:layout_constraintHeight_percent="0.07"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_MaxHeight"
-        app:layout_constraintTop_toBottomOf="@+id/tv_MaxHeight"
-        app:layout_constraintWidth_percent="0.8" />
-
-    <TextView
-        android:id="@+id/tv_avg"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/btn_white"
-        android:hint="평균속도"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_MinHeight"
-        app:layout_constraintHeight_percent="0.07"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_MinHeight"
-        app:layout_constraintTop_toBottomOf="@+id/tv_MinHeight"
-        app:layout_constraintWidth_percent="0.8" />
-
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_step"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0.000"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="걸음 수"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/tv_avg"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0.0"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="평균속도"
+                    android:textSize="15dp"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
     <android.widget.Button
         android:id="@+id/btn_back"
@@ -141,11 +166,12 @@
         android:text="뒤로가기"
         android:textColor="@color/white"
         android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_avg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/lay"
         app:layout_constraintHeight_percent="0.06"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_avg"
-        app:layout_constraintTop_toBottomOf="@+id/tv_avg"></android.widget.Button>
+        app:layout_constraintStart_toStartOf="@+id/lay"
+        ></android.widget.Button>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

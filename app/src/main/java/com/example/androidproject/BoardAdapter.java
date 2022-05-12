@@ -69,7 +69,10 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
         holder.title.setText(mList.get(position).getTitle());
         holder.time.setText(mList.get(position).getTime());
 
-        holder.img.setImageURI(Uri.parse(mList.get(position).getImgList().get(0)));
+       /* for(int i=0;i<mList.size();i++){
+            holder.img.setImageURI(Uri.parse(mList.get(position).getImgList().get(0)));
+        }*/
+
 
 
         for (int i=0; i<mList.get(position).getImgList().size();i++){

@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class BoardReadActivity extends AppCompatActivity {
-
+//내게시물
     TextView tv_board_content,tv_board_title;
     //리팩터
     //ImageView iv_board_img;
@@ -105,7 +105,6 @@ public class BoardReadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(BoardReadActivity.this,BoardActivity.class);
-                Intent EditIntent=new Intent(BoardReadActivity.this,BoardActivity.class);
                 if(tv_board_title!=null && tv_board_content!=null  ){
                     intent.putExtra("title",tv_board_title.getText().toString());
                     intent.putExtra("content",tv_board_content.getText().toString());
@@ -254,19 +253,17 @@ public class BoardReadActivity extends AppCompatActivity {
 
     }
     public void onBackPressed() {
-        Intent intent=new Intent(BoardReadActivity.this,BoardActivity.class);
+        Intent intent=new Intent(BoardReadActivity.this,BoardEnjoyActivity.class);
         //if(tv_board_title!=null && tv_board_content!=null && img1!=null ) {}
             System.out.println("onBackPressed");
             intent.putExtra("title", tv_board_title.getText().toString());
             intent.putExtra("content", tv_board_content.getText().toString());
             intent.putExtra("img1",img1);
             intent.putExtra("img2",img2);
-
-
             intent.putExtra("img3",img3);
             String str = "str";
             intent.putExtra("flag", str);
-            setResult(RESULT_OK, intent);
+            setResult(RESULT_CANCELED, intent);
             finish();
     }
 }

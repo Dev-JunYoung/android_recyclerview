@@ -14,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_white"
-        android:text="전체  게시물"
+        android:text="내 게시글"
         app:layout_constraintRight_toLeftOf="@id/btn_board_enjoy"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +30,7 @@
         android:layout_height="0dp"
         android:textColor="@color/white"
         android:background="@drawable/btn_choose"
-        android:text="즐겨찾는 게시물"
+        android:text="전체 게시글"
         app:layout_constraintBottom_toBottomOf="@id/btn_board_all"
         app:layout_constraintLeft_toRightOf="@id/btn_board_all"
         app:layout_constraintRight_toRightOf="parent"
@@ -39,19 +39,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         ></android.widget.Button>
 
-    <ImageButton
-        android:id="@+id/btn_AddBoard"
-        app:layout_constraintWidth_percent="0.05"
-        app:layout_constraintHeight_percent="0.05"
-        android:layout_width="0dp"
-        android:layout_height="50sp"
-        android:layout_alignParentRight="true"
-        android:background="#ffffff"
-        android:scaleType="fitCenter"
-        android:src="@drawable/icon_plus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        ></ImageButton>
+
 
     <View
         android:id="@+id/line"

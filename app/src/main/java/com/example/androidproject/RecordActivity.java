@@ -1,13 +1,13 @@
 package com.example.androidproject;
-
-import static com.example.androidproject.ProfileActivity.profile_cnt;
-import static com.example.androidproject.ProfileActivity.profile_distance;
-import static com.example.androidproject.ProfileActivity.profile_step;
-import static com.example.androidproject.ProfileActivity.profile_time;
+import static com.example.androidproject.DisplayStartActivity.profile_cnt;
+import static com.example.androidproject.DisplayStartActivity.profile_distance;
+import static com.example.androidproject.DisplayStartActivity.profile_step;
+import static com.example.androidproject.DisplayStartActivity.profile_time;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,27 +28,37 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.File;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
-//AppCompatActivity
-
 public class RecordActivity extends AppCompatActivity implements View.OnClickListener,
         CustomItemTouchHelperCallback.OnItemTouchListener, View.OnLongClickListener {
 
+    public final String TAG="RecordActivity";
     ArrayList<RecordItemData> selectionList=new ArrayList<>();
     int counter=0;
 
     boolean isContexualModeEnable=false;
     Toolbar toolbar;
 
+    double total_distance;
+    int total_step;
+    int hour;
+    int minute;
+    int second;
+    int resultSecond;
+    int resultMinute;
+    int resultHour;
     //리사이클러뷰 사용 준비
     ArrayList<RecordItemData> mArrayList;
     private RecordAdapter mAdapter;
-    private int count;
-
 
     ItemTouchHelper itemTouchHelper;
 
@@ -66,18 +76,8 @@ public class RecordActivity extends AppCompatActivity implements View.OnClickLis
     String detailStep;
     String detailAvg;
     private long backpressedTime = 0;
-    @Override
-    public void onBackPressed() {
-        if (System.currentTimeMillis() > backpressedTime + 2000) {
-            backpressedTime = System.currentTimeMillis();
-            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 로그인페이지로 이동됩니다.", Toast.LENGTH_SHORT).show();
-        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
-            Intent intent=new Intent(RecordActivity.this,MainActivity.class);
-            finish();
-            startActivity(intent);
-        }
-    }
-Menu menu2;
+
+    Menu menu2;
     @Override //menu버튼 객체화
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_record,menu);
@@ -86,7 +86,7 @@ Menu menu2;
         return true;
     }
 
-
+    // 다중삭제
     @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -105,10 +105,28 @@ Menu menu2;
                 @SuppressLint("ResourceType")
                 @Override
                 public void onClick(DialogInterface dialogInterface, int k) {
-                    for(int i=0;i<selectionList.size();i++){
+                /*    for(int i=0;i<selectionList.size();i++){
                         delete(i);
-                    }
+                    }*/
+
+                    Log.e(TAG, "onOptionsItemSelected:onClick ");
+                    //리사이클러뷰 아이템 삭제
                     mAdapter.RemoveItem(selectionList);
+                    for(int i=0;i<mArrayList.size();i++){
+                        Log.e(TAG, mArrayList.get(i).getAvg());
+                        Log.e(TAG, mArrayList.get(i).getDistance());
+                        Log.e(TAG, mArrayList.get(i).getStep());
+                        Log.e(TAG, mArrayList.size()+"");
+                        System.out.println("getAvg : "+mArrayList.get(i).getAvg());
+                        System.out.println("getDistance : "+mArrayList.get(i).getDistance());
+                        System.out.println("getStep : "+mArrayList.get(i).getStep());
+                        System.out.println("count : "+mArrayList.size());
+                    }
+
+                    sharedDelete();
+                    saveData(mArrayList);
+                    reLoadData();
+
                     RemoveContextualActionMode(menu2);
 
                 }
@@ -126,12 +144,12 @@ Menu menu2;
             //공유
 
             for (int k=0; k<selectionList.size();k++){
-                Sharing_intent.putExtra("distance",selectionList.get(k).getDistance().toString());
-                Sharing_intent.putExtra("time",selectionList.get(k).getTime().toString());
-                Sharing_intent.putExtra("step",selectionList.get(k).getStep().toString());
-                Sharing_intent.putExtra("maxHeight",selectionList.get(k).getMaxHeight().toString());
-                Sharing_intent.putExtra("minHeight",selectionList.get(k).getMinHeight().toString());
-                Sharing_intent.putExtra("avg",selectionList.get(k).getAvg().toString());
+                Sharing_intent.putExtra("distance",selectionList.get(k).getDistance());
+                Sharing_intent.putExtra("time",selectionList.get(k).getTime());
+                Sharing_intent.putExtra("step",selectionList.get(k).getStep());
+                Sharing_intent.putExtra("maxHeight",selectionList.get(k).getMaxHeight());
+                Sharing_intent.putExtra("minHeight",selectionList.get(k).getMinHeight());
+                Sharing_intent.putExtra("avg",selectionList.get(k).getAvg());
             }
 
 
@@ -141,6 +159,7 @@ Menu menu2;
         }
         return true;
     }
+    // 다중 삭제 후 원래대로 돌아가는 메서드
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void RemoveContextualActionMode(Menu menu) {
         isContexualModeEnable=false;
@@ -199,7 +218,6 @@ Menu menu2;
             detailStep=resultStep;
             detailAvg=resultAvg;
 
-            //리사이클러뷰로 리팩토링해야될 네가지. -> 뷰홀더
             try {
                 totalCnt  +=1;
                 totalStep  = totalStep+Integer.parseInt(resultStep);
@@ -212,9 +230,11 @@ Menu menu2;
                 tv_totalTime.setText(time);
                 tv_totalStep.setText(step);
                 profile_distance+= Integer.parseInt(detailDistance);
+
+                /*
                 profile_time=totalTime;
                 profile_step=totalStep;
-                profile_cnt=totalCnt;
+                profile_cnt=totalCnt;*/
             }catch (NumberFormatException e){
                 System.out.println("NumberFormatException In RecordActivity");
             }
@@ -243,17 +263,9 @@ Menu menu2;
         btn_board=findViewById(R.id.btn_board);
         btn_profile=findViewById(R.id.btn_profile);
         //btn_detail=findViewById(R.id.btn_detail);
-
-
-
-
-
-
-        //이부분이 뷰홀더로 묶여져야함. 아이템의 속성으로 들어갈 애들. 리사이클러뷰로 리팩토링
-       /* tv_distance=findViewById(R.id.tv_distance);
-        tv_time=findViewById(R.id.tv_time);
-        tv_height=findViewById(R.id.tv_height);
-        tv_step=findViewById(R.id.tv_step);*/
+        tv_totalCnt=findViewById(R.id.tv_totalCnt);
+        tv_totalTime=findViewById(R.id.tv_totalTime);
+        tv_totalStep=findViewById(R.id.tv_totalStep);
 
         /*---------------------------------------------------------------------*/
         RecyclerView mRecyclerView=(RecyclerView) findViewById(R.id.recyclerview_record_list);
@@ -262,14 +274,26 @@ Menu menu2;
 
         mArrayList=new ArrayList<>();
 
+        for (int i = 0; i < mArrayList.size(); i++){
+            System.out.println(mArrayList.get(i).getDistance());
+        }
+        if(mArrayList.size()==0){
+            System.out.println("mArrayList.size() : 0");
+        }
+
         mAdapter=new RecordAdapter(mArrayList,RecordActivity.this);
         mRecyclerView.setAdapter(mAdapter);
+        loadData();
+
+
 
         //역순정렬.
         mLinearLayoutManager.setReverseLayout(true);
         mLinearLayoutManager.setStackFromEnd(true);
 
         CustomItemTouchHelperCallback customItemTouchHelperCallback = null;
+        System.out.println("size : "+mArrayList.size());
+        //if(mArrayList.size()!=0){loadData();}
 
 
         //커스텀 리스너 객체생성 및 전달
@@ -283,6 +307,17 @@ Menu menu2;
                 intent.putExtra("maxHeight",mArrayList.get(pos).getMaxHeight().toString());
                 intent.putExtra("minHeight",mArrayList.get(pos).getMinHeight().toString());
                 intent.putExtra("avg",mArrayList.get(pos).getAvg().toString());
+
+                Log.e(TAG,"OnItemClick_location : "+mArrayList.get(pos).getUserLocation());
+                ArrayList<UserLocation> locationList=new ArrayList();
+                for (int i = 0; i < mArrayList.get(pos).getUserLocation().size(); i++){
+                    UserLocation userLocation=new UserLocation(mArrayList.get(pos).getUserLocation().get(i).latitude,mArrayList.get(pos).getUserLocation().get(i).longitude);
+                    locationList.add(userLocation);
+                }
+                intent.putExtra("location",locationList);
+
+
+
 
                 startActivity(intent);
 
@@ -299,30 +334,18 @@ Menu menu2;
                 ad.setNegativeButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.e(TAG,"OnDeleteClick");
                         totalCnt=totalCnt-1;
-
                         totalTime=totalTime-Integer.parseInt(mArrayList.get(pos).getTime());
                         totalStep=totalStep-Integer.parseInt(mArrayList.get(pos).getStep());
+                       /* profile_distance-= Integer.parseInt(mArrayList.get(pos).getDistance());*/
 
 
-                        profile_distance-= Integer.parseInt(mArrayList.get(pos).getDistance());
-
-
-                        profile_time=totalTime;
+                        /*profile_time=totalTime;
                         profile_step=totalStep;
-                        profile_cnt=totalCnt;
+                        profile_cnt=totalCnt;*/
 
                         mArrayList.remove(pos);
-
-                        String cnt= String.valueOf(totalCnt);
-                        String step= String.valueOf(totalStep);
-                        String time= String.valueOf(totalTime);
-
-                        tv_totalCnt.setText(cnt);
-                        tv_totalTime.setText(time);
-                        tv_totalStep.setText(step);
-
-
                         mAdapter.notifyDataSetChanged();
                         dialogInterface.dismiss();
                     }
@@ -346,9 +369,7 @@ Menu menu2;
 
 //        btn_detail.setOnClickListener(this);
 
-        tv_totalCnt=findViewById(R.id.tv_totalCnt);
-        tv_totalTime=findViewById(R.id.tv_totalTime);
-        tv_totalStep=findViewById(R.id.tv_totalStep);
+
 
         //ItemTouchHelper 객체생성(동작해야 될 설정 객체)
         itemTouchHelper=new ItemTouchHelper(new CustomItemTouchHelperCallback(mAdapter));
@@ -384,50 +405,6 @@ Menu menu2;
                 break;
         }
     }
-    @Override
-    protected void onPause() {
-
-        super.onPause();
-
-
-
-        totalTime=profile_time;
-        totalStep=profile_step;
-        totalCnt=profile_cnt;
-
-
-        String cnt= String.valueOf(totalCnt);
-        String step= String.valueOf(totalStep);
-        String time= String.valueOf(totalTime);
-
-        tv_totalCnt.setText(cnt);
-        tv_totalTime.setText(time);
-        tv_totalStep.setText(step);
-
-
-
-
-        Log.e("record로그퍼즈","record로그퍼즈");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.e("record로그스탑","record로그스탑");
-    }
-
-    @Override
-    protected void onRestart() {
-
-        super.onRestart();
-        Log.e("record로그리스타트","record로그리스타트");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e("record로그디스트로이","record로그디스트로이");
-    }
 
     @Override
     public boolean check() {
@@ -444,6 +421,7 @@ Menu menu2;
     }
 
 static int 식별;
+    // 스와이프 삭제
     @Override
     public void removeItem(int position) {
         position=식별;
@@ -455,30 +433,20 @@ static int 식별;
         ad.setNegativeButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int position) {
+                // 스와이프 삭제
+                Log.e(TAG,"removeItem-onClick");
                 position=식별;
-                System.out.println(position+"액티비티");
-                totalCnt=totalCnt-1;
-                totalTime=totalTime-Integer.parseInt(mArrayList.get(position).getTime());
-                totalStep=totalStep-Integer.parseInt(mArrayList.get(position).getStep());
 
+                //totalCnt=totalCnt-1;
 
-
-                profile_distance-= Integer.parseInt(mArrayList.get(position).getDistance());
-                profile_time=totalTime;
-                profile_step=totalStep;
-                profile_cnt=totalCnt;
                 //여기
                 mArrayList.remove(position);
 
-                String cnt= String.valueOf(totalCnt);
-                String step= String.valueOf(totalStep);
-                String time= String.valueOf(totalTime);
-
-                tv_totalCnt.setText(cnt);
-                tv_totalTime.setText(time);
-                tv_totalStep.setText(step);
 
                 mAdapter.notifyDataSetChanged();
+                sharedDelete();
+                saveData(mArrayList);
+                reLoadData();
                 dialogInterface.dismiss();
             }
         });
@@ -491,9 +459,9 @@ static int 식별;
         });
         ad.show();
     }
-
+    //롱클릭 시 체크박스 활성화, for 다중선택 메서드
     @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override //롱클릭 시 체크박스 활성화
+    @Override
     public boolean onLongClick(View view) {
 
         isContexualModeEnable=true;
@@ -510,6 +478,7 @@ static int 식별;
         return true;
     }
 
+    // 아이템 다중 선택
     public void MakeSelection(View view, int absoluteAdapterPosition) {
         if(((CheckBox)view).isChecked()){
             System.out.println(absoluteAdapterPosition);
@@ -527,27 +496,256 @@ static int 식별;
     }
 
     private void UpdateCounter() {
-//        itemCounter.setText(counter+ " Item Selected");
-
     }
     void delete(int pos){
-        totalCnt=totalCnt-1;
-        totalTime=totalTime-Integer.parseInt(mArrayList.get(pos).getTime());
-        totalStep=totalStep-Integer.parseInt(mArrayList.get(pos).getStep());
-        profile_distance-= Integer.parseInt(mArrayList.get(pos).getDistance());
-        profile_time=totalTime;
-        profile_step=totalStep;
-        profile_cnt=totalCnt;
-        //여기
-       // mArrayList.remove(pos);
+        // 총 시간
+        mArrayList.remove(pos);
 
-        String cnt= String.valueOf(totalCnt);
-        String step= String.valueOf(totalStep);
-        String time= String.valueOf(totalTime);
+    }
+    // 전체 삭제.
+    void sharedDelete(){
+        Log.e(TAG,"sharedDelete");
+        Gson gson = new Gson();
+        SharedPreferences sharedPreferences = getSharedPreferences("record", MODE_PRIVATE);
 
-        tv_totalCnt.setText(cnt);
-        tv_totalTime.setText(time);
-        tv_totalStep.setText(step);
+        SharedPreferences sharedPreferencesCurrent=getSharedPreferences("currentUser",MODE_PRIVATE);
+        String jsonCurrent=sharedPreferencesCurrent.getString("current",null);
+        Type typeCurrent=new TypeToken<User>(){}.getType();
+        User dataCurrent=gson.fromJson(jsonCurrent,typeCurrent);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+
+        Log.e(TAG,"sharedDelete, "+dataCurrent.getId());
+        editor.remove(dataCurrent.getId());
+        editor.apply();
     }
 
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("record", MODE_PRIVATE);
+        Gson gson = new Gson();
+        SharedPreferences sharedPreferencesCurrent=getSharedPreferences("currentUser",MODE_PRIVATE);
+        String jsonCurrent=sharedPreferencesCurrent.getString("current",null);
+        Type typeCurrent=new TypeToken<User>(){}.getType();
+        User dataCurrent=gson.fromJson(jsonCurrent,typeCurrent);
+        String json = sharedPreferences.getString(dataCurrent.getId(), null);
+
+        //String json = sharedPreferences.getString(user.getId(), null);
+        Type type = new TypeToken<ArrayList<RecordItemData>>() {}.getType();
+        ArrayList<RecordItemData> data= gson.fromJson(json, type);
+        System.out.println("data : "+data);
+        if (mArrayList == null) {
+            mArrayList = new ArrayList<>();
+        }
+        File file=new File(
+                "/data/data/com.example.androidproject/shared_prefs/record.xml"
+        );
+        if(file.exists()){
+            if(data!=null){
+                for (int i=0;i<data.size();i++){
+                    if(data.get(i)!=null){
+                        mArrayList.add(data.get(i));
+                    }
+                }
+            }
+        }else {
+            if(data!=null){
+                for (int i=0;i<data.size();i++){
+                    if(data.get(i)!=null){
+                        mArrayList.add(data.get(i));
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < mArrayList.size(); i++){
+            System.out.println(mArrayList.get(i).getDistance());
+            //Log.e(TAG,"getUserLocation : "+mArrayList.get(i).getUserLocation());
+        }
+
+        float currentDistance=0;
+        //데이터 총합.
+        for (int i = 0; i < mArrayList.size(); i++){
+            //거리 파싱
+            String[] intTime=mArrayList.get(i).getTime().split(":");
+            hour+=Integer.parseInt(intTime[0]);
+            minute+=Integer.parseInt(intTime[1]);
+            second+=Integer.parseInt(intTime[2]);
+
+            resultSecond=second%60;
+            resultMinute=(minute+second/60)%60;
+            resultHour=hour+((minute+second /60)/60);
+
+            //누적되는 거 확인
+            //  전체 분 시간 = 리스트 전체 분시간 + 전체 초시간/60 ( 분 시간 )
+
+            // 전체 시 시간 = 리스트 전체 시 시간 + 전체 분시간/60
+
+            System.out.println("누적시간 : "+resultHour+":"+resultMinute+":"+resultSecond);
+
+
+                currentDistance= Float.parseFloat(mArrayList.get(i).getDistance());
+                total_distance+=currentDistance;
+
+
+
+
+
+            if(mArrayList.get(i).getStep()!=null){
+                total_step+=Integer.parseInt(mArrayList.get(i).getStep());
+            }
+
+            // 60분, 60초 넘어가면 +1시간, +1분 해주는 것만 작성해서 전체데이터 계산하고, 저장
+            // 킬로미터 : 0.000; 는 float 으로 파싱해서 계산해보기.
+            // 평균속도 소수점 뒤 두자리만 나오게 만들기.
+        }
+
+        profile_distance= String.valueOf((double)((int)(total_distance*10))/10);
+        profile_time=resultHour+":"+resultMinute+":"+resultSecond;
+        profile_cnt= String.valueOf(mArrayList.size());
+        profile_step= String.valueOf(total_step);
+
+        tv_totalTime.setText(profile_time);
+        tv_totalStep.setText(profile_step);
+        tv_totalCnt.setText(profile_cnt);
+
+    }
+
+    private void saveData(ArrayList<RecordItemData> list) {
+        SharedPreferences sharedPreferences = getSharedPreferences("record", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+
+
+        SharedPreferences sharedPreferencesCurrent=getSharedPreferences("currentUser",MODE_PRIVATE);
+        String jsonCurrent=sharedPreferencesCurrent.getString("current",null);
+        Type typeCurrent=new TypeToken<User>(){}.getType();
+        User dataCurrent=gson.fromJson(jsonCurrent,typeCurrent);
+
+        editor.putString(dataCurrent.getId(), json);
+        editor.commit();
+    }
+    private void reLoadData() {
+
+        hour =0;
+        minute =0;
+        second =0;
+        total_step=0;
+
+        SharedPreferences sharedPreferences = getSharedPreferences("record", MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        SharedPreferences sharedPreferencesCurrent = getSharedPreferences("currentUser", MODE_PRIVATE);
+        String jsonCurrent = sharedPreferencesCurrent.getString("current", null);
+        Type typeCurrent = new TypeToken<User>() {
+        }.getType();
+        User dataCurrent = gson.fromJson(jsonCurrent, typeCurrent);
+
+
+        String json = sharedPreferences.getString(dataCurrent.getId() + "", null);
+
+        Type type = new TypeToken<ArrayList<RecordItemData>>() {
+        }.getType();
+        ArrayList<RecordItemData> data = gson.fromJson(json, type);
+        if (mArrayList == null) {
+            mArrayList = new ArrayList<>();
+        }
+        mArrayList.clear();
+
+        if (data != null) {
+            for (int i = 0; i < data.size(); i++) {
+                mArrayList.add(data.get(i));
+            }
+        }
+
+        float currentDistance = 0;
+        //데이터 총합.
+        for (int i = 0; i < mArrayList.size(); i++) {
+            //거리 파싱
+            String[] intTime = mArrayList.get(i).getTime().split(":");
+            hour += Integer.parseInt(intTime[0]);
+            minute += Integer.parseInt(intTime[1]);
+            second += Integer.parseInt(intTime[2]);
+
+            resultSecond = second % 60;
+            resultMinute = (minute + second / 60) % 60;
+            resultHour = hour + ((minute + second / 60) / 60);
+
+            //누적되는 거 확인
+            //  전체 분 시간 = 리스트 전체 분시간 + 전체 초시간/60 ( 분 시간 )
+
+            // 전체 시 시간 = 리스트 전체 시 시간 + 전체 분시간/60
+
+            System.out.println("누적시간 : " + resultHour + ":" + resultMinute + ":" + resultSecond);
+
+
+            currentDistance = Float.parseFloat(mArrayList.get(i).getDistance());
+
+            total_distance += currentDistance;
+
+            if (mArrayList.get(i).getStep() != null) {
+                total_step += Integer.parseInt(mArrayList.get(i).getStep());
+            }
+
+
+        }
+        profile_distance= String.valueOf((double)((int)(total_distance*10))/10);
+        profile_time=resultHour+":"+resultMinute+":"+resultSecond;
+        profile_cnt= String.valueOf(mArrayList.size());
+        profile_step= String.valueOf(total_step);
+
+
+
+        tv_totalTime.setText(profile_time);
+        tv_totalStep.setText(profile_step);
+        tv_totalCnt.setText(profile_cnt);
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        Log.e(TAG,"onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG,"onStop");
+
+        System.out.println("mArrayList : "+ mArrayList);
+        saveData(mArrayList);
+        finish();
+    }
+
+    @Override
+    protected void onRestart() {
+        mArrayList.clear();
+        loadData();
+        super.onRestart();
+        Log.e(TAG,"onRestart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG,"onDestroy()");
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        Log.e(TAG,"onResume()");
+        super.onResume();
+    }
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() > backpressedTime + 2000) {
+            backpressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 로그인페이지로 이동됩니다.", Toast.LENGTH_SHORT).show();
+        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
+            Intent intent=new Intent(RecordActivity.this,MainActivity.class);
+            finish();
+            startActivity(intent);
+        }
+    }
 }

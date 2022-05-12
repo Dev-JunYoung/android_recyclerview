@@ -1,5 +1,9 @@
 package com.example.androidproject;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+
 public class RecordItemData {
     private String distance;
     private String time;
@@ -9,9 +13,30 @@ public class RecordItemData {
     private String maxHeight;
     private String minHeight;
     private String avg;
-
     private String timestamp;
+    private ArrayList<LatLng> userLocation;
 
+
+    public ArrayList<LatLng> getUserLocation() {
+        return userLocation;
+    }
+
+    public void setUserLocation(ArrayList<LatLng> userLocation) {
+        this.userLocation = userLocation;
+    }
+
+
+    public RecordItemData(String distance, String time, String height, String step, String maxHeight, String minHeight, String avg, String timestamp, ArrayList<LatLng> userLocation) {
+        this.distance = distance;
+        this.time = time;
+        this.height = height;
+        this.step = step;
+        this.maxHeight = maxHeight;
+        this.minHeight = minHeight;
+        this.avg = avg;
+        this.timestamp = timestamp;
+        this.userLocation = userLocation;
+    }
 
     public RecordItemData(String distance, String time, String height, String step, String maxHeight, String minHeight, String avg, String timestamp) {
         this.distance = distance;

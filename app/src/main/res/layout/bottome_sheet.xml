@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/main">
+    android:background="@color/main"
+    app:layout_behavior="false"
+    android:id="@+id/bottomSheetContainer">
+
     <TextView
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +123,6 @@
 
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_flag"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/record_view"
@@ -145,26 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_margin="10sp"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:text="SpeedAccuracyMetersPerSecond: "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/tv_ing_AccuracySpeed"
-                android:layout_margin="0dp"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:text=""
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -199,9 +183,9 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <TextView
                 android:textSize="20sp"
                 android:textColor="@color/white"
@@ -228,62 +212,8 @@
                 android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-    </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>
-
-
-    <android.widget.Button
-        android:text="중지"
-        android:id="@+id/btn_finish"
-        android:textColor="@color/white"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/shape_for_circle_button_black"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_flag"
-        app:layout_constraintEnd_toStartOf="@+id/btn_flag"
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_flag"
-        app:layout_constraintWidth_percent="0.15" />
-
-    <android.widget.Button
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/maker"
-
-        app:layout_constraintBottom_toBottomOf="@+id/btn_flag"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintStart_toEndOf="@+id/btn_flag"
-        app:layout_constraintTop_toTopOf="@+id/btn_flag"
-        app:layout_constraintWidth_percent="0.15" />
-
-    <android.widget.ToggleButton
-        android:layout_marginTop="350dp"
-        android:id="@+id/btn_flag"
-        android:layout_width="0dp"
-        android:layout_height="0sp"
-        android:background="@drawable/shape_for_circle_button_black"
-        android:text="일시정지"
-        android:textOn="일시정지"
-        android:textOff="시작"
-        android:textColor="#fff"
-        android:textSize="30sp"
-        android:checked="true"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.15"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.864"
-        app:layout_constraintWidth_percent="0.33"></android.widget.ToggleButton>
-
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

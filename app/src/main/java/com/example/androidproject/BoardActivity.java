@@ -46,8 +46,8 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
     static final int REQUEST_READ_CODE=666;
     static final int REQUEST_EDIT_CODE=555;
     static final int RESULT_DELETE_CODE=444;
-
     static int i=0;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +118,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         /*-----------------------------------------------------------*/
-    }
+    } //onCreate
     private long backpressedTime = 0;
     public void onBackPressed() {
         if (System.currentTimeMillis() > backpressedTime + 2000) {
@@ -215,7 +215,7 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
                 if(img!=null){
                     imgList.add(img);
                 }if(img2!=null){
-                    imgList.add(img);
+                    imgList.add(img2);
                 }if(img3!=null){
                     imgList.add(img3);
                 }
@@ -253,8 +253,6 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             imgList.add(img);
             imgList.add(img2);
             imgList.add(img3);
-
-
 
             SharedPreferences sharedPreferences=getSharedPreferences("project",0);
             Gson gson=new Gson();
@@ -350,7 +348,15 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences("board", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(user.getId()+"", null);
+
+
+        SharedPreferences sharedPreferencesCurrent=getSharedPreferences("currentUser",MODE_PRIVATE);
+        String jsonCurrent=sharedPreferencesCurrent.getString("current",null);
+        Type typeCurrent=new TypeToken<User>(){}.getType();
+        User dataCurrent=gson.fromJson(jsonCurrent,typeCurrent);
+        String json = sharedPreferences.getString(dataCurrent.getId(), null);
+
+        //String json = sharedPreferences.getString(user.getId(), null);
         Type type = new TypeToken<ArrayList<BoardItemData>>() {}.getType();
         ArrayList<BoardItemData> data= gson.fromJson(json, type);
         if (mArrayList == null) {
@@ -368,10 +374,13 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
             }
 
         }else {
-            for (int i=0;i<data.size();i++){
-                mArrayList.add(data.get(i));
-                System.out.println(mArrayList.get(i));
+            if(data!=null){
+                for (int i=0;i<data.size();i++){
+                    mArrayList.add(data.get(i));
+                    System.out.println(mArrayList.get(i));
+                }
             }
+
         }
     }
     private void deleteData() {
@@ -392,9 +401,12 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
         if (mArrayList == null) {
             mArrayList = new ArrayList<>();
         }
-        for (int i=0;i<data.size();i++){
-            mArrayList.get(i);
+        if(data!=null){
+            for (int i=0;i<data.size();i++){
+                mArrayList.get(i);
+            }
         }
+
     }
 
 

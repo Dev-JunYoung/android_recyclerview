@@ -211,7 +211,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="내 게시물"
+            android:text="즐겨찾는 게시물"
             />
 
 
@@ -222,13 +222,14 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom"
         app:layout_constraintLeft_toLeftOf="parent"
-
+android:id="@+id/recyclerview_enjoy_board_list"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myBoard"
         tools:listitem="@layout/item_board">
 
     </androidx.recyclerview.widget.RecyclerView>
     <LinearLayout
+
         android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="70sp"

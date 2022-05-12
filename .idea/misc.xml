@@ -5,35 +5,43 @@
       <map>
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.182" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/aaaa.xml" value="0.3333333333333333" />
-        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_board.xml" value="0.1" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_board.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_boardEnjoy.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_board_edit.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_board_enjoy.xml" value="0.1" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_board_enjoy_read.xml" value="0.10194624652455977" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_board_read.xml" value="0.22" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_create_board.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_detail.xml" value="0.22" />
-        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_display_start.xml" value="0.1" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_display_start.xml" value="0.22" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_mountain_list.xml" value="0.2129115006412997" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_mountain_read.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_photo.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_profile.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_project.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_record.xml" value="0.22" />
-        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_record_detail.xml" value="0.1" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_record_detail.xml" value="0.12" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_record_resister.xml" value="0.18888888888888888" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_record_update.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_signup.xml" value="0.12" />
-        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_start.xml" value="0.3625" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_start.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_tamporary.xml" value="0.3625" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_temporary.xml" value="0.1" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_weather.xml" value="0.22" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/bottome_sheet.xml" value="0.2629328772979906" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/custom_notification.xml" value="0.22" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/item_board.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/item_mountain.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/item_photo.xml" value="0.1" />
-        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/item_record.xml" value="0.1" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/item_record.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/toolbar.xml" value="0.2941427960666952" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/view_photo.xml" value="0.15647712697734073" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/menu/addRecord.xml" value="0.31302083333333336" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/menu/add_photo_menu.xml" value="0.2201795639162035" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/menu/add_record.xml" value="0.1" />
+        <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/menu/board_enjoy.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/menu/board_rud.xml" value="0.1" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/menu/board_select.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/jeonjunyoung/AndroidStudioProjects/AndroidProject/app/src/main/res/menu/contexual_menu.xml" value="0.1" />

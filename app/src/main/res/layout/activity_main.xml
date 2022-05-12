@@ -47,6 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view"
         android:textAlignment="center"
         android:background="@drawable/rounded_corner2"
+        android:inputType="text"
         />
 
 
@@ -136,24 +137,7 @@
 
         ></android.widget.Button>
 
-    <android.widget.Button
-        android:id="@+id/btn_temporary"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="81dp"
-        android:background="@drawable/gray_rount_corner"
-        android:text="임시 로그인"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintHeight_percent="0.06"
-        app:layout_constraintLeft_toLeftOf="@id/btn_login"
-        app:layout_constraintRight_toRightOf="@id/btn_login"
-        app:layout_constraintTop_toBottomOf="@+id/btn_kakao"
 
-        app:layout_constraintWidth_percent="0.4"></android.widget.Button>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

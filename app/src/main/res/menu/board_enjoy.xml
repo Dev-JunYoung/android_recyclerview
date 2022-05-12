@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/map"
-        android:title="위치기록하기"
+        android:id="@+id/enjoy"
+        android:title="즐겨찾기"
         app:showAsAction="never">
     </item>
+
 </menu>
 

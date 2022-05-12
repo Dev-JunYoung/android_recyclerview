@@ -56,7 +56,7 @@ public class LookUpViewHolder extends RecyclerView.ViewHolder {
                 //into(ImageView targetImageView) : 다운로드 받은 이미지를 보여줄 이미지 뷰
                 into(image);
         //갤러리에 있는 모든 이미지 uri
-        //System.out.println(photo.getPath());
+        //System.out.println("photo.getPath() : "+photo.getPath());
     }
 
     public void setSelectionTracker(SelectionTracker<Long> selectionTracker) {

@@ -2,41 +2,21 @@ package com.example.androidproject;
 
 import java.util.ArrayList;
 
-public class Board {
-
+public class BoardEnjoy {
 
     String title;
     String content;
-    ArrayList<Photo> photos;
+    ArrayList photos;
     String Time;
     String name;
 
-    String photoPathStr;
-
-    public Board(String title, String content, String time, String name, String photoPathStr) {
-        this.title = title;
-        this.content = content;
-        Time = time;
-        this.name = name;
-        this.photoPathStr = photoPathStr;
-    }
-
-    public String getPhotoPathStr() {
-        return photoPathStr;
-    }
-
-    public void setPhotoPathStr(String photoPathStr) {
-        this.photoPathStr = photoPathStr;
-    }
-
-    public Board(String title, String content, ArrayList<Photo> photos, String time, String name) {
+    public BoardEnjoy(String title, String content, ArrayList photos, String time, String name) {
         this.title = title;
         this.content = content;
         this.photos = photos;
         Time = time;
         this.name = name;
     }
-
 
     public String getTitle() {
         return title;
@@ -54,11 +34,11 @@ public class Board {
         this.content = content;
     }
 
-    public ArrayList<Photo> getPhotos() {
+    public ArrayList getPhotos() {
         return photos;
     }
 
-    public void setPhotos(ArrayList<Photo> photos) {
+    public void setPhotos(ArrayList photos) {
         this.photos = photos;
     }
 

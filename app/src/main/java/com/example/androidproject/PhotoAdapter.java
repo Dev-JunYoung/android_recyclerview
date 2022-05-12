@@ -15,24 +15,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoAdapter extends RecyclerView.Adapter<LookUpViewHolder>{
+public class PhotoAdapter extends RecyclerView.Adapter<LookUpViewHolder> {
 
     // 글라이드로 가져온 이미지 저장 리스트
-    private List<Photo> photoList;       
+    private List<Photo> photoList;
     private Context context;
-    
+
     // pick한 이미지 저장리스트
     private ArrayList<String> mArrayList;
-    
-    
+
+
     private SelectionTracker<Long> selectionTracker;
 
 
     // 1.
-    public PhotoAdapter(Context context,ArrayList<String> mArrayList) {
+    public PhotoAdapter(Context context, ArrayList<String> mArrayList) {
 
         this.context = context;
-        this.mArrayList=mArrayList;
+        this.mArrayList = mArrayList;
         //1
         setHasStableIds(true);
         photoList = getPhotoList(context);
@@ -42,7 +42,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<LookUpViewHolder>{
     @NonNull
     @Override
     public LookUpViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_photo,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_photo, parent, false);
 
         return new LookUpViewHolder(view);
 
@@ -57,30 +57,50 @@ public class PhotoAdapter extends RecyclerView.Adapter<LookUpViewHolder>{
         holder.setPhoto(photo);
         holder.setSelectionTracker(selectionTracker);
 
-       // 어댑터 포지션 == 아이템아이디
-        if(holder.checked){
+        // 어댑터 포지션 == 아이템아이디
+        if (holder.checked) {
             //Add the selected photo.getPath()
             mArrayList.add(photo.getPath());
         }
 
     }
 
-    private List<Photo> getPhotoList(Context context){
-        String[] projection = new String[]{MediaStore.Images.Media.DISPLAY_NAME,MediaStore.Images.Media.DATA};
-        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
+    @SuppressLint("Range")
+    private List<Photo> getPhotoList(Context context) {
+
+       // String[] projection = new String[]{MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.DATA};
+        String[] projection = new String[]{MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media._ID};
+
+        Cursor cursor = context.getContentResolver()
+                .query(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        projection,
+                        null,
+                        null,
+                        null
+                );
+        System.out.println("MediaStore.Images.Media.DATA : " + MediaStore.Images.Media.DATA);
+        System.out.println("MediaStore.Images.Media.DATA : " + MediaStore.Images.Media._ID);
+        System.out.println("MediaStore.Images.Media.DISPLAY_NAME : " + MediaStore.Images.Media.DISPLAY_NAME);
+        System.out.println(" URI : " + MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         ArrayList<Photo> photoList = new ArrayList<>();
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(projection[0]));
-            @SuppressLint("Range") String path = cursor.getString(cursor.getColumnIndex(projection[1]));;
-            Photo photo = new Photo(name, path);
+            @SuppressLint("Range") String path = cursor.getString(cursor.getColumnIndex(projection[1]));
+            ;
+            Photo photo = new Photo(name, "content://media/external/images/media/"+path);
             photoList.add(photo);
+        }//여기
+
+
+        for (int i = 0; i < photoList.size(); i++) {
+            System.out.println(photoList.get(i).getPath());
         }
+
         cursor.close();
+
+
         return photoList;
     }
 

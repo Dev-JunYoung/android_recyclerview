@@ -1,15 +1,19 @@
 package com.example.androidproject;
 
+import static com.example.androidproject.DisplayStartActivity.profile_cnt;
+import static com.example.androidproject.DisplayStartActivity.profile_distance;
+import static com.example.androidproject.DisplayStartActivity.profile_step;
+import static com.example.androidproject.DisplayStartActivity.profile_time;
+import static com.example.androidproject.MainActivity.kakaoCheck;
+import static com.example.androidproject.MainActivity.kakaoImg;
 import static com.example.androidproject.MainActivity.user;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
@@ -32,17 +36,28 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+
+    final String TAG="ProfileActivity";
+
     private Button btn_display_start, btn_record, btn_board, btn_profile, btn_update;
     String tempId, tempPass;
     public static String tempName;
     String tempAge;
+
+
 
     Context context;
     String distance, time, step, cnt;
@@ -54,14 +69,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     final int GALLERY = 101; // 갤러리 선택 시 인텐트로 보내는 값
 
 
-    public static int profile_distance=0;
-    public static int profile_time=0;
-    public static int profile_step=0;
-    public static int profile_cnt=0;
+
 
     SharedPreferences sharedPreferences;
     Gson gson;
 
+
+    private ArrayList<BoardItemData> mArrayList;
+    private BoardAdapter mAdapter;
 
 
 
@@ -69,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private long backpressedTime = 0;
     String imgStr;
+    private java.lang.Object Object;
 
     @Override
     public void onBackPressed() {
@@ -136,7 +152,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        iv_profile = findViewById(R.id.iv_profile);
 
 
         //이미생성된 액티비티가 존재한다면
@@ -152,8 +168,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         Intent intent = getIntent();
 
-        tv_name.setText("이름 : " + user.getName());
-        tv_age.setText("나이 : " + user.getAge());
+
+
+        SharedPreferences sharedPreferences=getSharedPreferences("currentUser",MODE_PRIVATE);
+        String json=sharedPreferences.getString("current",null);
+        Gson gson=new Gson();
+        Type type=new TypeToken<User>(){}.getType();
+        User data=gson.fromJson(json,type);
+
+        tv_name.setText("이름 : " + data.getName());
+        tv_age.setText("나이 : " + data.getAge());
 
         btn_display_start = findViewById(R.id.btn_display_start);
         btn_record = findViewById(R.id.btn_record);
@@ -161,7 +185,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         btn_profile = findViewById(R.id.btn_profile);
         btn_update = findViewById(R.id.btn_update);
         //btn_menu=findViewById(R.id.btn_menu);
-        iv_profile = findViewById(R.id.iv_profile);
+
 
         btn_update.setOnClickListener(this);
         btn_display_start.setOnClickListener(this);
@@ -173,20 +197,49 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 "/data/data/com.example.androidproject/shared_prefs/userProfile.xml"
         );
         SharedPreferences preferences=getSharedPreferences("userProfile",0);
-        String path=preferences.getString(user.getId(),"");
-        System.out.println(path);
-        System.out.println("저장된 패스"+preferences.getString(user.getId(),""));
 
 
-        iv_profile.setImageURI(Uri.parse(path));
+
+        String path;
         if(file.exists()){
             SharedPreferences profile=getSharedPreferences("userProfile",0);
-            System.out.println(profile.getString(user.getId(),""));
-            System.out.println(profile.getString(user.getId(),"")!=null);
             if(profile.getString(user.getId(),"")!=null){
                 iv_profile.setImageURI(Uri.parse(profile.getString(user.getId(),"")));
             }
         }
+        Log.e(TAG,kakaoCheck+"");
+        if(kakaoCheck){
+            Log.e(TAG,"kakaoCheck_Img");
+            Glide.with(iv_profile).load(kakaoImg).into(iv_profile);
+        }else {
+            Log.e(TAG,"normalLogin_Img");
+            path=preferences.getString(user.getId(),"");
+            iv_profile.setImageURI(Uri.parse(path));
+        }
+
+
+        RecyclerView mRecyclerView=(RecyclerView)findViewById(R.id.recyclerview_enjoy_board_list);
+        LinearLayoutManager mLinearLayoutManager=new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+
+        mArrayList=new ArrayList<>();
+        mAdapter=new BoardAdapter(mArrayList,this.getApplicationContext());
+        mRecyclerView.setAdapter(mAdapter);
+
+        loadData();
+
+
+
+        tv_distance.setText(String.valueOf(profile_distance));
+        tv_time.setText(String.valueOf(profile_time));
+        tv_step.setText(String.valueOf(profile_step));
+        tv_cnt.setText(String.valueOf(profile_cnt));
+
+
+
+
+
     } //onCreate
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -278,7 +331,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         tv_time.setText(String.valueOf(profile_time));
         tv_step.setText(String.valueOf(profile_step));
         tv_cnt.setText(String.valueOf(profile_cnt));
-  }
+    }
 
     @Override
     protected void onDestroy() {
@@ -311,6 +364,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             iv_profile.setImageBitmap(imageBitmap);
             //여기
             imgStr=getImageUri(this.getApplicationContext(),imageBitmap).toString();
+            System.out.println("imgStr : "+imgStr);
         }
         if (requestCode == GALLERY && resultCode == RESULT_OK) {
           /*  Bundle extras = data.getEx Bitmap imageBitmaptras();
@@ -322,6 +376,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             imgStr= String.valueOf(selectedImageUri);
         }
         //유저 프로필 저장.
+        //에러 났다가 또 안나는...
+        SharedPreferences userProfileSharedPreferences =
+                getSharedPreferences("userProfile",MODE_PRIVATE);
+        SharedPreferences.Editor editor=userProfileSharedPreferences.edit();
+        editor.putString(user.getId(),imgStr);
+        System.out.println(imgStr);
+        editor.commit();
+      /*  //유저 프로필 저장.
+      //에러 나서 수정했다가 또 에러나서 위에로 교체
         SharedPreferences userProfileSharedPreferences =
                 getSharedPreferences("userProfile",MODE_PRIVATE);
         SharedPreferences.Editor editor=userProfileSharedPreferences.edit();
@@ -332,7 +395,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         @SuppressLint("Range") String path=c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
         editor.putString(user.getId(),path);
         System.out.println("path : "+path);
-        editor.commit();
+        editor.commit();*/
     }
 
     public static Bitmap rotateImage(Bitmap source, float angle) {
@@ -348,5 +411,57 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return Uri.parse(path);
     }
 
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("boardEnjoy", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(user.getId()+"", null);
+        System.out.println(json);
+        Type type = new TypeToken<ArrayList<BoardItemData>>() {}.getType();
+        //Type type = new TypeToken<BoardItemData>() {}.getType();
+        ArrayList<BoardItemData> data= gson.fromJson(json, type);
+        //BoardItemData data= gson.fromJson(json, type);
+        System.out.println("EnjoyBoard : "+data);
+        if (mArrayList == null) {
+            mArrayList = new ArrayList<>();
+        }
+        File file=new File(
+                "/data/data/com.example.androidproject/shared_prefs/boardEnjoy.xml"
+        );
+        if(file.exists()){
+            if(data!=null){
+                for (int i=0;i<data.size();i++){
+                    mArrayList.add(data.get(i));
+                    System.out.println(mArrayList.get(i));
+                }
+            }
+
+        }else {
+            if(data!=null){
+                for (int i=0;i<data.size();i++){
+                    mArrayList.add(data.get(i));
+                    System.out.println(mArrayList.get(i));
+                }
+            }
+
+        }
+    }
+    void delete(){
+        SharedPreferences sharedPreferences = getSharedPreferences("boardEnjoy", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(user.getId()+"", null);
+        Type type = new TypeToken<ArrayList<BoardItemData>>() {}.getType();
+        //Type type = new TypeToken<BoardItemData>() {}.getType();
+        ArrayList<BoardItemData> data= gson.fromJson(json, type);
+    }
+
+    private void saveData(ArrayList<BoardItemData> list) {
+        SharedPreferences sharedPreferences = getSharedPreferences("boardEnjoy", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(user.getId()+"", json);
+        editor.apply();
+    }
 
 }

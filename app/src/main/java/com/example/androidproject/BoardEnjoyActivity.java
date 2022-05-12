@@ -1,10 +1,11 @@
 package com.example.androidproject;
 
-import static com.example.androidproject.BoardActivity.REQUEST_READ_CODE;
+import static com.example.androidproject.MainActivity.user;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -31,9 +32,14 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
     String photo;
     static int i=0;
 
+    static final int REQUEST_ENJOY_CODE=999;
+
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     ArrayList boardAll=new ArrayList();
+
+    ArrayList<BoardItemData> enjoyItemData;
+
 
     private long backpressedTime = 0;
     public void onBackPressed() {
@@ -49,9 +55,10 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        enjoyItemData =new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_enjoy);
-
+        System.out.println("전체게시글");
         btn_display_start=findViewById(R.id.btn_display_start);
         btn_record=findViewById(R.id.btn_record);
         btn_board=findViewById(R.id.btn_board);
@@ -66,7 +73,7 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
         btn_board.setOnClickListener(this);
         btn_profile.setOnClickListener(this);
 
-        btn_AddBoard.setOnClickListener(this);
+//        btn_AddBoard.setOnClickListener(this);
         btn_board_all.setOnClickListener(this);
         btn_board_enjoy.setOnClickListener(this);
 
@@ -78,6 +85,12 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
         mAdapter=new BoardAdapter(mArrayList,this.getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
         loadData();
+        for(int i=0;i<boardAll.size();i++){
+//            mArrayList.add((BoardItemData) boardAll.get(i));
+        }
+
+
+        //loadData();
 
         sharedPreferences = getSharedPreferences("board",MODE_PRIVATE);
         editor=sharedPreferences.edit();
@@ -85,27 +98,21 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
         mAdapter.setOnItemClickListener(new RecordAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(View v, int pos) {
-                Intent intent=new Intent(BoardEnjoyActivity.this,BoardReadActivity.class);
+                Intent intent=new Intent(BoardEnjoyActivity.this,BoardEnjoyReadActivity.class);
                 intent.putExtra("title",mArrayList.get(pos).getTitle());
                 intent.putExtra("content",mArrayList.get(pos).getContent());
-
                 //수정
                 intent.putExtra("photo",mArrayList.get(pos).getImgList().toString());
-                /*intent.putExtra("img2",mArrayList.get(pos).getImgList().get(1));
-                intent.putExtra("img3",mArrayList.get(pos).getImgList().get(2));*/
-                System.out.println("Board photo"+mArrayList.get(pos).getImgList().toString());
-                /*intent.putExtra("img3",mArrayList.get(pos).getImgList().get(2).toString());*/
-
-
+                intent.putExtra("time",mArrayList.get(pos).getTime());
+                intent.putExtra("name",mArrayList.get(pos).getName());
+                System.out.println("클릭");
                 i=pos;
-                startActivityForResult(intent,REQUEST_READ_CODE);
-
-
+                //startActivity(intent);
+                startActivityForResult(intent,REQUEST_ENJOY_CODE);
             }
 
             @Override
             public void OnDeleteClick(View v, int pos) {
-
             }
         });
 
@@ -117,9 +124,41 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("requestCode : "+requestCode);
+        System.out.println("resultCode : "+resultCode);
 
+        if(resultCode==-1){
+
+            //SharedPreferences preferences=getSharedPreferences("boardEnjoy",0);
+            SharedPreferences preferences=getApplicationContext().getSharedPreferences("boardEnjoy",MODE_PRIVATE);
+            SharedPreferences.Editor editor=preferences.edit();
+
+
+
+            String title= data.getStringExtra("title");
+            String content=data.getStringExtra("content");
+            String photo=data.getStringExtra("photo");
+            String time=data.getStringExtra("time");
+            String name=data.getStringExtra("name");
+
+            photo.substring(2,photo.length()-2);
+            System.out.println(photo);
+            System.out.println(photo.substring(1,photo.length()-1));
+            String[] a =photo.substring(1,photo.length()-1).split(", ");
+            ArrayList list=new ArrayList();
+            for(int i=0;i<a.length;i++){
+                list.add(a[i]);
+            }
+            for (int i = 0; i < list.size(); i++){
+                System.out.println(list.get(i).toString());
+            }
+
+            BoardItemData board=new BoardItemData(title,content,list,name,time);         //Board board=new Board(title,content,time,name,photo);
+
+            enjoyItemData.add(board);
+            saveEnjoyData(enjoyItemData);
+        }
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -169,16 +208,45 @@ public class BoardEnjoyActivity extends AppCompatActivity implements View.OnClic
         Type type=new TypeToken<ArrayList<BoardItemData>>(){}.getType();
         Map<String,?> keys = sharedPreferences.getAll();
         Gson gson=new Gson();
-        //board 테이블의 전체값을 불러온다.
         for(Map.Entry<String,?> entry : keys.entrySet()){
             String json=entry.getValue().toString();
             ArrayList<BoardItemData> data=gson.fromJson(json,type);
             boardAll.add(data);
-            for(int i=0;i<data.size();i++){
-                mArrayList.add(data.get(i));
+            if(data!=null){
+                for (int i = 0; i < data.size(); i++){
+                    mArrayList.add(data.get(i));
+                }
             }
-
         }
-        /*System.out.println(mArrayList.get(0).getName());*/
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e("BOARDENJOY","onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("BOARDENJOY","onDestroy");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e("BOARDENJOY","onRestart");
+    }
+
+
+
+    private void saveEnjoyData(ArrayList<BoardItemData> list) {
+        SharedPreferences sharedPreferences = getSharedPreferences("boardEnjoy", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(user.getId()+"", json);
+        editor.apply();
+    }
+
 }
