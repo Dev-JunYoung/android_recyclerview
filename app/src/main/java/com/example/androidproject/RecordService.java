@@ -358,6 +358,7 @@ public class RecordService  extends Service implements SensorEventListener, Loca
                 sendHeight= String.valueOf(numMaxHeight-numMinHeight);
                 // 평균 속도
                 speedAvg=(Math.ceil((distance/totalSeconds)*100))/100*3.6;
+
                 sendSpeedAvg= String.valueOf(speedAvg);
                 //sendCurrent=String.valueOf( (Math.ceil(nCurrentSpeed*10000))/10000);
                 sendCurrent=String.valueOf(nCurrentSpeed);

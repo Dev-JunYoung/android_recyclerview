@@ -78,8 +78,6 @@ public class SignupActivity extends AppCompatActivity {
 
                 Type type=new TypeToken<ArrayList<User>>(){}.getType();
                 // userArrayList == 저장소에 있던 userList 가져온 것.
-
-
                 ArrayList<User> userArrayList=gson.fromJson(json,type);
                 System.out.println("회원 가입 전 : "+userArrayList);
                 boolean check=true;
@@ -98,9 +96,14 @@ public class SignupActivity extends AppCompatActivity {
                     //스타트
                     startActivity(intent);
                 }else {
+                    for(int i=0;i<userArrayList.size();i++){
+                        //중복체크
+                        if(userArrayList.get(i).getId().equals(user.getId())){
+                            check=false;
+                        }
+                    }
                     if(check){ //중복체크확인
-                        userArrayList.add(user);
-                        Toast.makeText(SignupActivity.this, "회원 가입에 성공 하셨습니다.", Toast.LENGTH_SHORT).show();
+                        //userArrayList.add(user);
                         //값 생성
                         //리스트에 추가
                         userArrayList.add(user);
@@ -110,13 +113,10 @@ public class SignupActivity extends AppCompatActivity {
                         editor.putString("userList",jsonUserList);
                         editor.commit();
                         startActivity(intent);
+                        Toast.makeText(SignupActivity.this, "회원 가입에 성공 하셨습니다.", Toast.LENGTH_SHORT).show();
                     }else {
+                        Toast.makeText(SignupActivity.this, "중복 ID입니다..", Toast.LENGTH_SHORT).show();
                     }
-                    System.out.println("회원 가입 후 : "+userArrayList);
-
-
-
-
                 }//else
 
 
